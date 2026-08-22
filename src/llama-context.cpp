@@ -454,6 +454,12 @@ llama_context::llama_context(
 
         cparams.pipeline_parallel = pipeline_parallel;
 
+        // allow disabling pipeline parallelism via environment variable
+        const char * LLAMA_PIPELINE_PARALLEL_DISABLE = getenv("LLAMA_PIPELINE_PARALLEL_DISABLE");
+        if (LLAMA_PIPELINE_PARALLEL_DISABLE && atoi(LLAMA_PIPELINE_PARALLEL_DISABLE) != 0) {
+            cparams.pipeline_parallel = false;
+        }
+
         if (cparams.pipeline_parallel) {
             LLAMA_LOG_INFO("%s: pipeline parallelism enabled\n", __func__);
         }
